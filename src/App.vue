@@ -6,11 +6,9 @@
 
               <Formulario @getNewDatos="addNewUsuario" />
 
-              <Tabla :usuarios="usuarios"/>
+              <Tabla @actualizarDatos="actualizarDatos" @getBorrar="borrarUsuario" :usuarios="usuarios"/>
 
-              <br>
-
-              <Tarjetas :usuarios="usuarios"/>
+              <!-- <Tarjetas :usuarios="usuarios"/> -->
               
        </div>
 
@@ -18,7 +16,7 @@
 
 <script>
        import Tabla from './components/Tabla';
-       import Tarjetas from './components/Tarjetas';
+       // import Tarjetas from './components/Tarjetas';
        import Formulario from './components/Formulario';
 
        export default {
@@ -28,7 +26,7 @@
               components: {
 
                      Tabla,
-                     Tarjetas,
+                     // Tarjetas,
                      Formulario,
 
               },
@@ -61,6 +59,18 @@
                             this.usuarios.push( persona );
 
                      },
+
+                     borrarUsuario(persona){
+
+                            this.usuarios = this.usuarios.filter( function(obj){ return obj != persona  } );
+
+                     },
+
+                     actualizarDatos(usuarios_new){
+
+                            this.usuarios = usuarios_new;
+
+                     }
 
               },
 

@@ -17,6 +17,7 @@
                                           <th>ID</th>
                                           <th>Nombre</th>
                                           <th>Correo</th>
+                                          <th>Opciones</th>
 
                                    </thead>
 
@@ -24,9 +25,23 @@
 
                                           <tr v-for="(usuario,i) in usuarios" :key="i">
                                                  
-                                                 <td>{{ usuario.id }}</td>
-                                                 <td>{{ usuario.nombre }}</td>
-                                                 <td>{{ usuario.correo }}</td>
+                                                 <td v-if="editando === usuario.id"><input type="text" class="form-control" v-model="usuario.id" /></td><td v-else>{{ usuario.id }}</td>
+                                                 <td v-if="editando === usuario.id"><input type="text" class="form-control" v-model="usuario.nombre" /></td><td v-else>{{ usuario.nombre }}</td>
+                                                 <td v-if="editando === usuario.id"><input type="text" class="form-control" v-model="usuario.correo" /></td><td v-else>{{ usuario.correo }}</td>
+                                                 <td>
+                                                        
+                                                        <div class="btn-group">
+
+
+                                                               <a v-if="editando === usuario.id" @click="guardarEdicion()" class="btn btn-sm btn-outline-success">Guardar</a>
+                                                               <a v-else @click="editarUsuario(usuario)" class="btn btn-sm btn-outline-primary">Editar</a>
+
+                                                               <a v-if="editando === usuario.id" @click="cancelarEdicion(usuario)" class="btn btn-sm btn-outline-secondary">Cerrar</a>
+                                                               <a v-else @click="borrarUsuario(usuario)" class="btn btn-sm btn-outline-danger">Borrar</a>
+
+                                                        </div>
+
+                                                 </td>
 
                                           </tr>
 
@@ -59,6 +74,51 @@ export default {
 
        },
 
+       data(){
+              return{
+
+                     editando: false,
+                     cache_persona: null,
+
+              }
+       },
+
+       methods: {
+
+              borrarUsuario(persona){
+
+                     this.$emit("getBorrar", persona);
+
+              },
+
+              editarUsuario(persona){
+
+                     this.cache_persona = Object.assign({}, persona);
+                     this.editando = persona.id;
+
+              },
+
+              guardarEdicion( ){
+
+                     this.$emit( "actualizarDatos", this.usuarios );
+                     this.resetEdicion();
+
+              },
+
+              cancelarEdicion(persona){
+
+                     Object.assign(persona, this.cache_persona);
+                     this.resetEdicion();
+
+              },
+
+              resetEdicion(){
+                     this.cache_persona = null;
+                     this.editando = false;
+              }
+
+       }
+
 
 }
 </script>
@@ -71,7 +131,7 @@ export default {
               color: #9e9e9e;
        }
        th,td{
-              padding: 10px;
+              padding: 15px;
               background-color: rgba(65, 184, 131,0.2);
               color: #5e5e5e;
        }
@@ -90,9 +150,18 @@ export default {
               margin-bottom:10px;
        }
 
+       td input{
+              width:100%;
+              text-align: center;
+       }
+
        table{
               margin:0 auto;
-              width:70%;
+              width:100%;
+       }
+
+       .container{
+              margin-bottom: 3em;
        }
 
 </style>
