@@ -14,8 +14,8 @@
 
                                    <thead>
 
-                                          <th>ID</th>
                                           <th>Nombre</th>
+                                          <th>Apellidos</th>
                                           <th>Correo</th>
                                           <th>Opciones</th>
 
@@ -25,18 +25,18 @@
 
                                           <tr v-for="(usuario,i) in usuarios" :key="i">
                                                  
-                                                 <td v-if="editando === usuario.id"><input type="text" class="form-control" v-model="usuario.id" /></td><td v-else>{{ usuario.id }}</td>
-                                                 <td v-if="editando === usuario.id"><input type="text" class="form-control" v-model="usuario.nombre" /></td><td v-else>{{ usuario.nombre }}</td>
-                                                 <td v-if="editando === usuario.id"><input type="text" class="form-control" v-model="usuario.correo" /></td><td v-else>{{ usuario.correo }}</td>
+                                                 <td v-if="editando === usuario"><form @submit.prevent="guardarEdicion()"><input type="text" class="form-control" v-model="usuario.nombre" /></form></td><td v-else>{{ usuario.nombre }}</td>
+                                                 <td v-if="editando === usuario"><form @submit.prevent="guardarEdicion()"><input type="text" class="form-control" v-model="usuario.apellidos" /></form></td><td v-else>{{ usuario.apellidos }}</td>
+                                                 <td v-if="editando === usuario"><form @submit.prevent="guardarEdicion()"><input type="text" class="form-control" v-model="usuario.correo" /></form></td><td v-else>{{ usuario.correo }}</td>
                                                  <td>
                                                         
                                                         <div class="btn-group">
 
 
-                                                               <a v-if="editando === usuario.id" @click="guardarEdicion()" class="btn btn-sm btn-outline-success">Guardar</a>
+                                                               <a v-if="editando === usuario" @click="guardarEdicion()" class="btn btn-sm btn-outline-success">Guardar</a>
                                                                <a v-else @click="editarUsuario(usuario)" class="btn btn-sm btn-outline-primary">Editar</a>
 
-                                                               <a v-if="editando === usuario.id" @click="cancelarEdicion(usuario)" class="btn btn-sm btn-outline-secondary">Cerrar</a>
+                                                               <a v-if="editando === usuario" @click="cancelarEdicion(usuario)" class="btn btn-sm btn-outline-secondary">Cerrar</a>
                                                                <a v-else @click="borrarUsuario(usuario)" class="btn btn-sm btn-outline-danger">Borrar</a>
 
                                                         </div>
@@ -63,6 +63,7 @@
 </template>
 
 <script>
+import { useToast } from "vue-toastification";
 
 export default {
 
@@ -77,6 +78,7 @@ export default {
        data(){
               return{
 
+                     toast: useToast(),
                      editando: false,
                      cache_persona: null,
 
@@ -85,16 +87,20 @@ export default {
 
        methods: {
 
-              borrarUsuario(persona){
-
-                     this.$emit("getBorrar", persona);
+              borrarUsuario(persona){ 
+                     
+                     this.$emit("getBorrar", persona); 
+                                   
+                     this.toast.info("Contacto "+ persona.nombre +" borrado correctamente.", {
+                            timeout: 1200
+                     });       
 
               },
 
               editarUsuario(persona){
 
                      this.cache_persona = Object.assign({}, persona);
-                     this.editando = persona.id;
+                     this.editando = persona;
 
               },
 
@@ -102,6 +108,9 @@ export default {
 
                      this.$emit( "actualizarDatos", this.usuarios );
                      this.resetEdicion();
+                     this.toast.success("Contacto editado correctamente.", {
+                            timeout: 1000
+                     });
 
               },
 
@@ -153,6 +162,15 @@ export default {
        td input{
               width:100%;
               text-align: center;
+              background-color: rgba(65, 184, 131,0.5);
+              border:none;
+              padding: 0;
+       }
+
+       td input:focus{
+              background-color: rgba(255,255,255,0.2);
+              border:none;  
+              box-shadow: none;
        }
 
        table{

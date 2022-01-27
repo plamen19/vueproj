@@ -44,10 +44,10 @@
               created(){
                      this.usuarios = [
 
-                                   {id:'1',nombre:'plamen',correo:'plamen@gmail.com'},
-                                   {id:'2',nombre:'plamen',correo:'plamen@gmail.com'},
-                                   {id:'3',nombre:'plamen',correo:'plamen@gmail.com'},
-                                   {id:'4',nombre:'plamen',correo:'plamen@gmail.com'},
+                                   {nombre:'Plamen',apellidos:'Atanasov',correo:'plamen@gmail.com'},
+                                   {nombre:'Plamen',apellidos:'Atanasov',correo:'plamen@gmail.com'},
+                                   {nombre:'Plamen',apellidos:'Atanasov',correo:'plamen@gmail.com'},
+                                   {nombre:'Plamen',apellidos:'Atanasov',correo:'plamen@gmail.com'},
 
                      ]
               },

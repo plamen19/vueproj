@@ -4,13 +4,13 @@
 
               <div class="card-header">
 
-                     <h3>{{ usuario.id }}</h3>
+                     <h3>{{ usuario.nombre }}</h3>
 
               </div>
 
               <div class="card-body">
 
-                     <p>{{ usuario.nombre }}</p>
+                     <p>{{ usuario.apellidos }}</p>
                      <br>
                      <p>{{ usuario.correo }}</p>
 

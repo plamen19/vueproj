@@ -9,11 +9,11 @@
                             <h3>Agrega un usuario</h3>
                             <p>Agrega un nuevo usuario al sistema.</p>
 
-                            <div class="col-md-2">
+                            <div class="col-md-4">
 
                                    <div class="form-group">
 
-                                          <input @focus="resetEstado" :class="{ 'is-invalid': procesando && idInvalido }" v-model="persona.id" type="number" placeholder="ID" class="form-control">
+                                          <input @focus="resetEstado" :class="{ 'is-invalid': procesando && nombreInvalido, 'is-valid': correcto }" v-model="persona.nombre" type="text" placeholder="Nombre" class="form-control">
 
                                    </div>
 
@@ -23,17 +23,17 @@
 
                                    <div class="form-group">
 
-                                          <input @focus="resetEstado" :class="{ 'is-invalid': procesando && nombreInvalido }" v-model="persona.nombre" type="text" placeholder="Nombre" class="form-control">
+                                          <input @focus="resetEstado" :class="{ 'is-invalid': procesando && apellidoInvalido, 'is-valid': correcto }" v-model="persona.apellido" type="text" placeholder="Apellido" class="form-control">
 
                                    </div>
 
                             </div>
 
-                            <div class="col-md-6">
+                            <div class="col-md-4">
 
                                    <div class="form-group">
 
-                                          <input @focus="resetEstado" :class="{ 'is-invalid': procesando && correoInvalido }" v-model="persona.correo" type="email" placeholder="Correo@correo.com" class="form-control">
+                                          <input @focus="resetEstado" :class="{ 'is-invalid': procesando && correoInvalido, 'is-valid': correcto }" v-model="persona.correo" type="email" placeholder="Correo@correo.com" class="form-control">
 
                                    </div>
 
@@ -66,6 +66,8 @@
 </template>
 
 <script>
+import { useToast } from "vue-toastification";
+
 export default {
        
        name: 'formulario',
@@ -74,14 +76,15 @@ export default {
 
               return{
 
+                     toast: useToast(),
                      procesando: false,
                      correcto: false,
                      error: false,
 
                      persona: {
 
-                            id: '',
                             nombre: '',
+                            apellido: '',
                             correo: '',
 
                      }
@@ -91,14 +94,14 @@ export default {
        },
 
        computed: {
-              idInvalido() {
-
-                     return this.persona.id.length < 1;
-                     
-              },
               nombreInvalido() {
 
                      return this.persona.nombre.length < 1;
+                     
+              },
+              apellidoInvalido() {
+
+                     return this.persona.apellido.length < 1;
 
               },
               correoInvalido() {
@@ -115,24 +118,28 @@ export default {
                      this.procesando = true;
                      this.resetEstado();
                      
-                     if (this.idInvalido || this.nombreInvalido || this.correoInvalido) {
+                     if (this.nombreInvalido || this.apellidoInvalido || this.correoInvalido) {
 
                             this.error = true;
                             return;
 
                      }
 
-                     this.$emit( "getNewDatos", { id: this.persona.id, nombre: this.persona.nombre, correo: this.persona.correo } );
+                     this.$emit( "getNewDatos", { nombre: this.persona.nombre, apellido: this.persona.apellido, correo: this.persona.correo } );
 
                      this.error = false;
                      this.correcto = true;
                      this.procesando = false;
 
+                     this.toast.info("Contacto nuevo agregado correctamente a la lista.", {
+                            timeout: 1000
+                     });       
+
                      // Restablecemos el valor de la variables
                      this.persona= {
                             nombre: '',
                             apellido: '',
-                            email: '',
+                            correo: '',
                      }
 
               },
